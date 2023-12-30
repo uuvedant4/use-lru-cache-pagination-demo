@@ -1,11 +1,13 @@
-import { useState, useEffect } from "react";
-import { useLRUCache } from "use-lru-cache";
 import "./App.css";
+import { useLRUCache } from "use-lru-cache";
+import { useState, useEffect } from "react";
+
+const CAPACITY = 3;
 
 function App() {
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
-  const { get, put, getCachedData } = useLRUCache(3);
+  const { get, put, getCachedData, clearCache } = useLRUCache(CAPACITY);
   const [loading, setLoading] = useState(false);
   const [cachedPages, setCachedPages] = useState([]);
 
@@ -33,6 +35,15 @@ function App() {
 
   return (
     <div className="container">
+      <button
+        className="clear"
+        onClick={() => {
+          clearCache();
+          setCachedPages(getCachedData());
+        }}
+      >
+        clear cache
+      </button>
       <div className="cached-data">
         <h4>Cached Pages</h4>
         <div className="cached-pages-container">
